@@ -22,8 +22,9 @@ def get_boxplot_data(data):
             stats["fliers"]) # Fliers
 
 
-topos = list({x.split(".")[0] for x in os.listdir(root_folder) if ".gml.json" in x})
-topos.sort()
+topos = sorted(
+    {x.split(".")[0] for x in os.listdir(root_folder) if ".gml.json" in x}
+)
 # topos = ["Chinanet", "Harnet", "Iij", "Renater2010", "Uninett2011"]
 
 # generate the folder (delete if it already exists)
@@ -37,8 +38,7 @@ os.mkdir(tikz_folder)
 ####################
 
 result = []
-idx = 0
-for topo in reversed(topos):
+for idx, topo in enumerate(reversed(topos)):
     name = "".join([c for c in topo if not c.isdigit()])
     y_pos = idx * 1.5
 
@@ -50,10 +50,6 @@ for topo in reversed(topos):
     data = data[0]
     cost = np.array(data["random_permutations"]["cost"]["values"])
     ideal = data["ideal_cost"]
-
-    # ignore all samples that have the same worst cost as the idel cost
-    # if np.abs(ideal - cost.max()) < 1e-7:
-        # continue
 
     # compute the statistics
     (median, box, whiskers, fliers) = get_boxplot_data(cost)
@@ -78,8 +74,6 @@ for topo in reversed(topos):
 
     # store the result
     result.append({"name": name, "y_pos": y_pos, "plot": plot})
-
-    idx += 1
 
 ###################################
 # Start generating the Latex Plot #

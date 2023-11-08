@@ -24,11 +24,13 @@ def file_to_boxplot(filename, key):
     return list(q.data)
 
 
-networks = list({filename.split(".")[0]
-                 for filename in os.listdir(root_folder)
-                 if filename.endswith('json')})
-networks.sort()
-
+networks = sorted(
+    {
+        filename.split(".")[0]
+        for filename in os.listdir(root_folder)
+        if filename.endswith('json')
+    }
+)
 df = pd.DataFrame(columns=['network',
                            'random_05', 'random_25', 'random_75', 'random_95',
                            'optimizer_05', 'optimizer_25', 'optimizer_75', 'optimizer_95',
